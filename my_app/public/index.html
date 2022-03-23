@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Oryza Sativa Project</title>
     <style>
-
         body {
             font-family: sans-serif;
             color: black;
@@ -13,7 +13,6 @@
 
         .top {
             overflow: hidden;
-            width: 100vw;
             height: 15vh;
             background-color: #1e3821;
             text-align: center;
@@ -23,31 +22,11 @@
         .bottom {
             font-family: sans-serif;
             z-index: -1;
-            height: 85vh;
+            height: fit-content;
+            padding: 2vw;
             top: 0;
             background-color: #DCDCDC;
             overflow: hidden;
-        }
-
-        .left {
-            width: 33%;
-            height: 85vh;
-            float: left;
-            background-color: #DCDCDC;
-        }
-
-        .center {
-            width: 34%;
-            height: 85vh;
-            float: left;
-            background-color: #DCDCDC;
-        }
-
-        .right {
-            width: 33%;
-            height: 85vh;
-            float: left;
-            background-color: #DCDCDC;
         }
 
         .bottom button {
@@ -66,29 +45,13 @@
             text-align: center;
         }
 
-        .centeredTop {
-            position: relative;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .centered {
-            position: relative;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
         .dropdown {
             width: 20vw;
             display: inline;
         }
 
         .dropdown button {
-            
+
             background-color: white;
             border: 1px solid #1e3821;
             color: #1e3821;
@@ -117,7 +80,6 @@
         .dropdown-content {
             display: none;
             width: 20vw;
-            margin-left: 6.5vw;
             height: fit-content;
             position: absolute;
         }
@@ -147,102 +109,167 @@
 
 <body>
 
-<div class="top">
-    <h1>
-        Oryza Sativa Project
-    </h1>
+    <div class="top">
+        <h1>
+            Oryza Sativa Project
+        </h1>
 
-</div>
+    </div>
 
-<div class="bottom">
-    <div class="left">
-        <div class="centeredTop">
-            <h2>
-               Select Operation
-            </h2>
-            <div class="dropdown">
-                <button id="dropdown_selection">Options</button>
-                <div class="dropdown-content">
-                    <button>Insert</button>
-                    <button>Delete</button>
-                    <button>Update</button>
-                    <button>Selection</button>
-                    <button>Projection</button>
-                    <button>Join</button>
-                    <button>Aggregation</button>
-                    <button>Nested Aggregation</button>
-                    <button>Division</button>
-                </div>
+    <div class="bottom">
+
+
+        <div class="dropdown">
+            <button id="dropdown_selection">Options</button>
+            <div class="dropdown-content">
+                <button>Insert</button>
+                <button>Delete</button>
+                <button>Update</button>
+                <button>Selection</button>
+                <button>Projection</button>
+                <button>Join</button>
+                <button>Aggregation</button>
+                <button>Nested Aggregation</button>
+                <button>Division</button>
             </div>
-            </div>
-    </div>
-    <div class="center">
-        <div class="centered">
-            <form id="form" method='POST' action="oracle-test.php"> <!--refresh page when submitted-->
-                <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-                Number: <input type="text" name="insNo"> <br><br>
-                Name: <input type="text" name="insName"> <br><br>
-    
-                <input type="submit" value="Insert" name="insertSubmit"><p></p>
-            </form>
         </div>
-    </div>
-    <div class="right">
-        <div class="centered">
-            <button onclick="myFunction()">Submit</button>
-        </div>
-    </div>
-    
-        <h2>Reset</h2>
-        <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
-
-        <form method="POST" action="oracle-test.php">
-            <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
-            <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-            <p><input type="submit" value="Reset" name="reset"></p>
-        </form>
-
-        <hr>
 
         <h2>Insert Values into DemoTable</h2>
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             Number: <input type="text" name="insNo"> <br><br>
             Name: <input type="text" name="insName"> <br><br>
 
-            <input type="submit" value="Insert" name="insertSubmit"><p></p>
+            <input type="submit" value="Insert" name="insertSubmit">
+            <p></p>
+        </form>
+
+        <hr>
+
+        <h2>Delete Values into DemoTable</h2>
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
+            Name: <input type="text" name="insName"> <br><br>
+
+            <input type="submit" value="Insert" name="insertSubmit">
+            <p></p>
         </form>
 
         <hr>
 
         <h2>Update Name in DemoTable</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        </p>
 
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
             Old Name: <input type="text" name="oldName"> <br><br>
             New Name: <input type="text" name="newName"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit"><p></p>
+            <input type="submit" value="Update" name="updateSubmit">
+            <p></p>
         </form>
 
         <hr>
 
-        <h2>Count the Tuples in DemoTable</h2>
-        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-            <input type="submit" name="countTuples"><p></p>
+        <h2>Selection</h2>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        </p>
+
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+            Old Name: <input type="text" name="oldName"> <br><br>
+            New Name: <input type="text" name="newName"> <br><br>
+
+            <input type="submit" value="Update" name="updateSubmit">
+            <p></p>
         </form>
 
-        <br> The number of tuples in demoTable: 2<br>	
+        <hr>
 
-</body>
-</div>
+        <h2>Projection</h2>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        </p>
 
-<script>
-    function myFunction() {
-        var button = document.getElementById('form')
-    }
-    </script>
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+            Old Name: <input type="text" name="oldName"> <br><br>
+            New Name: <input type="text" name="newName"> <br><br>
+
+            <input type="submit" value="Update" name="updateSubmit">
+            <p></p>
+        </form>
+
+        <hr>
+
+        <h2>Join</h2>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        </p>
+
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+            Old Name: <input type="text" name="oldName"> <br><br>
+            New Name: <input type="text" name="newName"> <br><br>
+
+            <input type="submit" value="Update" name="updateSubmit">
+            <p></p>
+        </form>
+
+        <hr>
+
+        <h2>Aggregation</h2>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        </p>
+
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+            Old Name: <input type="text" name="oldName"> <br><br>
+            New Name: <input type="text" name="newName"> <br><br>
+
+            <input type="submit" value="Update" name="updateSubmit">
+            <p></p>
+        </form>
+
+        <hr>
+
+        <h2>Nested Aggregation</h2>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        </p>
+
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+            Old Name: <input type="text" name="oldName"> <br><br>
+            New Name: <input type="text" name="newName"> <br><br>
+
+            <input type="submit" value="Update" name="updateSubmit">
+            <p></p>
+        </form>
+
+        <hr>
+
+        <h2>Division</h2>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        </p>
+
+        <form method="POST" action="oracle-test.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+            Old Name: <input type="text" name="oldName"> <br><br>
+            New Name: <input type="text" name="newName"> <br><br>
+
+            <input type="submit" value="Update" name="updateSubmit">
+            <p></p>
+        </form>
+
+    </div>
 </body>
+
 </html>
