@@ -248,16 +248,22 @@
         <hr>
 
         <h2>Selection</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        <p>select budget from BudgetRankMap where budget [operator] [value]. Values are case sensitive
+        </p>
+        <p>operator is one of: "<", "<=", ">", ">=", "="
+        </p>
+        <p>value is any real number
         </p>
 
-        <form method="POST" action="index.php">
+        <form method="GET" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="selectionRequest" name="selectionRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit">
+            Operator: <input type="text" name="selectionOperator"> <br><br>
+
+            Value: <input type="text" name="selectionValue"> <br><br>
+
+            <input type="submit" value="Run Query" name="selectionSubmit">
             <p></p>
         </form>
 
@@ -360,7 +366,7 @@
         }
 
         function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
-            //echo "<br>running ".$cmdstr."<br>";
+            echo "<br>running ".$cmdstr."<br>";
             global $db_conn, $success;
 
             $statement = OCIParse($db_conn, $cmdstr);
@@ -436,7 +442,7 @@
 
             // Your username is ora_(CWL_ID) and the password is a(student number). For example,
 			// ora_platypus is the username and a12345678 is the password.
-            $db_conn = OCILogon("ora_cwl", "a12345678", "dbhost.students.cs.ubc.ca:1522/stu");
+            $db_conn = OCILogon("ora_hl2001", "a66620923", "dbhost.students.cs.ubc.ca:1522/stu");
 
             if ($db_conn) {
                 debugAlertMessage("Database is Connected");
@@ -505,6 +511,31 @@
             }
         }
 
+        function handleSelectionRequest() {
+            global $db_conn;
+
+            $operator = $_GET['selectionOperator'];
+            $value = $_GET['selectionValue'];
+
+            // you need the wrap the old name and new name values with single quotations
+            // executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            $result = executePlainSQL("SELECT LM_rank, budget FROM RankBudgetMap WHERE budget${operator}${value}");
+            
+            echo "<br>Retrieved data from Selection Request:<br>";
+            echo "<table>";
+            echo "<tr><th>LM_rank</th><th>Budget</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                echo "<tr><td>" . $row["LM_RANK"] . "</td><td>" . $row["BUDGET"] . "</td></tr>"; //or just use "echo $row[0]"
+                // Can also do:
+                // echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td></tr>";
+            }
+
+            echo "</table>";
+            OCICommit($db_conn);
+            
+        }
+
         // HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handlePOSTRequest() {
@@ -527,6 +558,8 @@
             if (connectToDB()) {
                 if (array_key_exists('countTuples', $_GET)) {
                     handleCountRequest();
+                } else if (array_key_exists('selectionRequest', $_GET)) {
+                    handleSelectionRequest();
                 }
 
                 disconnectFromDB();
@@ -535,7 +568,7 @@
 
 		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest'])) {
+        } else if (isset($_GET['selectionSubmit'])) {
             handleGETRequest();
         }
 		?>
