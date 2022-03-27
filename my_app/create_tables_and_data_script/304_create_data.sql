@@ -157,7 +157,7 @@ INSERT INTO ModelNumberBrandMap VALUES ('THBT0D1X',	'CORSAIR');
 DROP TABLE Peripherals cascade constraints;
 CREATE TABLE Peripherals (
     serial_number CHAR(10),
-    peripheral_type CHAR(5) NOT NULL,         -- logically should be NOT NULL
+    equipment_type CHAR(5) NOT NULL,         -- logically should be NOT NULL
     PRIMARY KEY (serial_number),
     FOREIGN KEY (serial_number) REFERENCES Equipment_Stocks
 );
@@ -172,7 +172,7 @@ INSERT INTO Peripherals VALUES ('SN32KJ893B',	'MONIT');
 DROP TABLE Computer cascade constraints;
 CREATE TABLE Computer(
     serial_number CHAR(10),
-    computer_type CHAR(5) NOT NULL,         -- logically should be NOT NULL
+    equipment_type CHAR(5) NOT NULL,         -- logically should be NOT NULL
     PRIMARY KEY (serial_number),
     FOREIGN KEY (serial_number) REFERENCES Equipment_Stocks 
 );

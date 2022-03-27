@@ -1,4 +1,3 @@
-<!--Based off of https://www.students.cs.ubc.ca/~cs-304/resources/php-oracle-resources/oracle-test.txt-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -249,11 +248,13 @@
         <hr>
 
         <h2>Selection</h2>
-        <p>select budget from BudgetRankMap where budget [operator] [value]. Values are case sensitive
+        <p>select LM_rank, budget from BudgetRankMap where budget [Operator] [Value]. Values are case sensitive
         </p>
         <p>operator is one of: "<", "<=", ">", ">=", "="
         </p>
         <p>value is any real number
+        </p>
+        <p>E.g &emsp; Operator: > &emsp; Value: 5000000
         </p>
 
         <form method="GET" action="index.php">
@@ -271,16 +272,24 @@
         <hr>
 
         <h2>Projection</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        <p>select [Fields] from [Table] Values are case sensitive
+        </p>
+        <p>Fields is a combination of: "serial_number", "equipment_type". Separate by comas
+        </p>
+        <p>Table is one of: "Peripherals", "Computer"
+        </p>
+        <p>E.g &emsp; Fields: serial_number,equipment_type &emsp; Table: Computer
         </p>
 
-        <form method="POST" action="index.php">
+        <form method="GET" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="projectionRequest" name="projectionRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit">
+            Fields: <input type="text" name="projectionFields"> <br><br>
+
+            Table: <input type="text" name="projectionTable"> <br><br>
+
+            <input type="submit" value="Run Query" name="projectionSubmit">
             <p></p>
         </form>
 
@@ -518,8 +527,6 @@
             $operator = $_GET['selectionOperator'];
             $value = $_GET['selectionValue'];
 
-            // you need the wrap the old name and new name values with single quotations
-            // executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
             $result = executePlainSQL("SELECT LM_rank, budget FROM RankBudgetMap WHERE budget${operator}${value}");
             
             echo "<br>Retrieved data from Selection Request:<br>";
@@ -535,6 +542,26 @@
             echo "</table>";
             OCICommit($db_conn);
             
+        }
+
+        function handleProjectionRequest() {
+            global $db_conn;
+
+            $fields = $_GET['projectionFields'];
+            $table = $_GET['projectionTable'];
+
+            $result = executePlainSQL("SELECT ${fields} FROM ${table}");
+            
+            echo "<br>Retrieved data from Projection Request:<br>";
+            echo "<table>";
+            echo "<tr><th>serial_number</th><th>equipment_type</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                echo "<tr><td>" . $row["SERIAL_NUMBER"] . "</td><td>" . $row["EQUIPMENT_TYPE"] . "</td></tr>";
+            }
+
+            echo "</table>";
+            OCICommit($db_conn);
         }
 
         // HANDLE ALL POST ROUTES
@@ -557,10 +584,10 @@
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handleGETRequest() {
             if (connectToDB()) {
-                if (array_key_exists('countTuples', $_GET)) {
-                    handleCountRequest();
-                } else if (array_key_exists('selectionRequest', $_GET)) {
+                if (array_key_exists('selectionRequest', $_GET)) {
                     handleSelectionRequest();
+                } else if (array_key_exists('projectionRequest', $_GET)) {
+                    handleProjectionRequest();
                 }
 
                 disconnectFromDB();
@@ -569,7 +596,7 @@
 
 		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['selectionSubmit'])) {
+        } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit'])) {
             handleGETRequest();
         }
 		?>
