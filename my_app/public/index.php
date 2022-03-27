@@ -272,13 +272,10 @@
         <hr>
 
         <h2>Projection</h2>
-        <p>select [Fields] from [Table] Values are case sensitive
+        <p>select [Fields] denoting information about Equipment in the database. Values are case sensitive
         </p>
-        <p>Fields is a combination of: "serial_number", "equipment_type". Separate by comas
-        </p>
-        <p>Table is one of: "Peripherals", "Computer"
-        </p>
-        <p>E.g &emsp; Fields: serial_number,equipment_type &emsp; Table: Computer
+        <p>Fields is a combination of: "serial_number", "model_number", "UPC_code", "inventory_number". Separate by comas
+        <p>E.g &emsp; Fields: serial_number, model_number, UPC_code, inventory_number
         </p>
 
         <form method="GET" action="index.php">
@@ -286,8 +283,6 @@
             <input type="hidden" id="projectionRequest" name="projectionRequest">
 
             Fields: <input type="text" name="projectionFields"> <br><br>
-
-            Table: <input type="text" name="projectionTable"> <br><br>
 
             <input type="submit" value="Run Query" name="projectionSubmit">
             <p></p>
@@ -556,16 +551,15 @@
             global $db_conn;
 
             $fields = $_GET['projectionFields'];
-            $table = $_GET['projectionTable'];
 
-            $result = executePlainSQL("SELECT ${fields} FROM ${table}");
+            $result = executePlainSQL("SELECT ${fields} FROM Equipment_Stocks");
             
             echo "<br>Retrieved data from Projection Request:<br>";
             echo "<table>";
-            echo "<tr><th>serial_number</th><th>equipment_type</th></tr>";
+            echo "<tr><th>serial_number</th><th>model_number</th><th>UPC_code</th><th>inventory_number</th></tr>";
 
             while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-                echo "<tr><td>" . $row["SERIAL_NUMBER"] . "</td><td>" . $row["EQUIPMENT_TYPE"] . "</td></tr>";
+                echo "<tr><td>" . $row["SERIAL_NUMBER"] . "</td><td>" . $row["MODEL_NUMBER"] . "</td><td>" . $row["UPC_CODE"] . "</td><td>" . $row["INVENTORY_NUMBER"] . "</td></tr>";
             }
 
             echo "</table>";
