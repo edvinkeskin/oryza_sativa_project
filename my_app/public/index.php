@@ -193,7 +193,7 @@
             </div>
         </div>
 
-        <h2>Insert Values into DemoTable</h2>
+        <h2>Insert</h2>
         <form method="POST" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
@@ -206,18 +206,11 @@
 
         <hr>
 
-        <h2>Delete Values into DemoTable</h2>
-        <div class="dropdown2">
-            <button>Tables</button>
-            <div class="dropdown2-tables">
-                <button>EquipmentSupplier</button>
-                <button>Computer</button>
-            </div>
-        </div>
+        <h2>Delete</h2>
         <form method="POST" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="deleteRequest" name="deleteRequest">
-            Name: <input type="text" name="insName"> <br><br>
+            Value: <input type="text" name="deleteValue"> <br><br>
 
             <input type="submit" value="Insert" name="insertSubmit">
             <p></p>
@@ -225,7 +218,8 @@
 
         <hr>
 
-        <h2>Update Name in DemoTable</h2>
+        <h2>Update</h2>
+        <p>select 
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
         </p>
         <div class="dropdown2">
@@ -244,6 +238,10 @@
             <input type="submit" value="Update" name="updateSubmit">
             <p></p>
         </form>
+
+        <script>
+            document.getElementById("myspan").textContent="newtext";
+        </script>
 
         <hr>
 
@@ -474,22 +472,21 @@
         function handleUpdateRequest() {
             global $db_conn;
 
-            $old_name = $_POST['oldName'];
+            $table = $_POST['table'];
             $new_name = $_POST['newName'];
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $table . "'");
             OCICommit($db_conn);
         }
 
-        function handleResetRequest() {
+        function handleDeleteRequest() {
             global $db_conn;
-            // Drop old table
-            executePlainSQL("DROP TABLE demoTable");
 
-            // Create new table
+            $value = $_GET['deleteValue'];
+
             echo "<br> creating new table <br>";
-            executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
+            executePlainSQL("DELETE FROM EquipmentSupplier WHERE supplier_name == ${value}");
             OCICommit($db_conn);
         }
 
@@ -592,8 +589,8 @@
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handlePOSTRequest() {
             if (connectToDB()) {
-                if (array_key_exists('resetTablesRequest', $_POST)) {
-                    handleResetRequest();
+                if (array_key_exists('deleteRequest', $_POST)) {
+                    handleDeleteRequest();
                 } else if (array_key_exists('updateQueryRequest', $_POST)) {
                     handleUpdateRequest();
                 } else if (array_key_exists('insertQueryRequest', $_POST)) {
