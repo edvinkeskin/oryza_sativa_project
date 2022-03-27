@@ -296,16 +296,24 @@
         <hr>
 
         <h2>Join</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        <p>Find the [Fields] of all equipment with brand [Brand]. Values are case sensitive
+        </p>
+        <p>Fields is a combination of: "serial_number", "model_number", "UPC_code", "inventory_number". Separate by comas
+        </p>
+        <p>Brand is any string. Existing brands in database: "HP", "MSI", "LOGITECH", "LENOVO", "DELL", "CORSAIR"
+        </p>
+        <p>E.g &emsp; Fields: serial_number,inventory_number &emsp; Brand: DELL
         </p>
 
-        <form method="POST" action="index.php">
+        <form method="GET" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="joinRequest" name="joinRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit">
+            Fields: <input type="text" name="joinFields"> <br><br>
+
+            Brand: <input type="text" name="joinBrand"> <br><br>
+
+            <input type="submit" value="Run Query" name="joinSubmit">
             <p></p>
         </form>
 
@@ -564,6 +572,33 @@
             OCICommit($db_conn);
         }
 
+        function handleJoinRequest() {
+            global $db_conn;
+
+            $fields = $_GET['joinFields'];
+            $brand = $_GET['joinBrand'];
+
+            // $result = executePlainSQL("SELECT ${fields} FROM ${table}");
+
+            $result = executePlainSQL(
+                "SELECT ${fields}
+                FROM Equipment_Stocks
+                INNER JOIN ModelNumberBrandMap ON Equipment_Stocks.model_number=ModelNumberBrandMap.model_number
+                WHERE ModelNumberBrandMap.brand='${brand}'"
+            );
+            
+            echo "<br>Retrieved data from Projection Request:<br>";
+            echo "<table>";
+            echo "<tr><th>serial_number</th><th>model_number</th><th>UPC_code</th><th>inventory_number</th><th>Brand</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                echo "<tr><td>" . $row["SERIAL_NUMBER"] . "</td><td>" . $row["MODEL_NUMBER"] . "</td><td>" . $row["UPC_CODE"] . "</td><td>" . $row["INVENTORY_NUMBER"] . "</td><td>" . $brand . "</td></tr>";
+            }
+
+            echo "</table>";
+            OCICommit($db_conn);   
+        }
+
         // HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handlePOSTRequest() {
@@ -588,6 +623,8 @@
                     handleSelectionRequest();
                 } else if (array_key_exists('projectionRequest', $_GET)) {
                     handleProjectionRequest();
+                } else if (array_key_exists('joinRequest', $_GET)) {
+                    handleJoinRequest();
                 }
 
                 disconnectFromDB();
@@ -596,7 +633,7 @@
 
 		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit'])) {
+        } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit']) || isset($_GET['joinSubmit'])) {
             handleGETRequest();
         }
 		?>
