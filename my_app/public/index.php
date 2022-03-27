@@ -587,7 +587,7 @@
                 WHERE ModelNumberBrandMap.brand='${brand}'"
             );
             
-            echo "<br>Retrieved data from Projection Request:<br>";
+            echo "<br>Retrieved data from Join Request:<br>";
             echo "<table>";
             echo "<tr><th>serial_number</th><th>model_number</th><th>UPC_code</th><th>inventory_number</th><th>Brand</th></tr>";
 
