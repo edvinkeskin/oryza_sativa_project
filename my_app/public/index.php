@@ -248,20 +248,16 @@
         <hr>
 
         <h2>Selection</h2>
-        <p>select LM_rank, budget from BudgetRankMap where budget [Operator] [Value]. Values are case sensitive
-        </p>
-        <p>operator is one of: "<", "<=", ">", ">=", "="
+        <p>select LM_rank, budget from BudgetRankMap where budget >= [Value]. Values are case sensitive
         </p>
         <p>value is any real number
         </p>
-        <p>E.g &emsp; Operator: > &emsp; Value: 5000000
+        <p>E.g &emsp; Value: 5000000
         </p>
 
         <form method="GET" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="selectionRequest" name="selectionRequest">
-
-            Operator: <input type="text" name="selectionOperator"> <br><br>
 
             Value: <input type="text" name="selectionValue"> <br><br>
 
@@ -291,20 +287,16 @@
         <hr>
 
         <h2>Join</h2>
-        <p>Find the [Fields] of all equipment with brand [Brand]. Values are case sensitive
-        </p>
-        <p>Fields is a combination of: "serial_number", "model_number", "UPC_code", "inventory_number". Separate by comas
+        <p>Find the Serial Number and Inventory Number of all equipment with brand [Brand]. Values are case sensitive
         </p>
         <p>Brand is any string. Existing brands in database: "HP", "MSI", "LOGITECH", "LENOVO", "DELL", "CORSAIR"
         </p>
-        <p>E.g &emsp; Fields: serial_number,inventory_number &emsp; Brand: DELL
+        <p>E.g &emsp; Brand: DELL
         </p>
 
         <form method="GET" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="joinRequest" name="joinRequest">
-
-            Fields: <input type="text" name="joinFields"> <br><br>
 
             Brand: <input type="text" name="joinBrand"> <br><br>
 
@@ -527,10 +519,9 @@
         function handleSelectionRequest() {
             global $db_conn;
 
-            $operator = $_GET['selectionOperator'];
             $value = $_GET['selectionValue'];
 
-            $result = executePlainSQL("SELECT LM_rank, budget FROM RankBudgetMap WHERE budget${operator}${value}");
+            $result = executePlainSQL("SELECT LM_rank, budget FROM RankBudgetMap WHERE budget >= ${value}");
             
             echo "<br>Retrieved data from Selection Request:<br>";
             echo "<table>";
@@ -575,7 +566,7 @@
             // $result = executePlainSQL("SELECT ${fields} FROM ${table}");
 
             $result = executePlainSQL(
-                "SELECT ${fields}
+                "SELECT serial_number, inventory_number
                 FROM Equipment_Stocks
                 INNER JOIN ModelNumberBrandMap ON Equipment_Stocks.model_number=ModelNumberBrandMap.model_number
                 WHERE ModelNumberBrandMap.brand='${brand}'"
@@ -583,10 +574,10 @@
             
             echo "<br>Retrieved data from Join Request:<br>";
             echo "<table>";
-            echo "<tr><th>serial_number</th><th>model_number</th><th>UPC_code</th><th>inventory_number</th><th>Brand</th></tr>";
+            echo "<tr><th>serial_number</th><th>inventory_number</th><th>Brand</th></tr>";
 
             while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-                echo "<tr><td>" . $row["SERIAL_NUMBER"] . "</td><td>" . $row["MODEL_NUMBER"] . "</td><td>" . $row["UPC_CODE"] . "</td><td>" . $row["INVENTORY_NUMBER"] . "</td><td>" . $brand . "</td></tr>";
+                echo "<tr><td>" . $row["SERIAL_NUMBER"] . "</td><td>" . $row["INVENTORY_NUMBER"] . "</td><td>" . $brand . "</td></tr>";
             }
 
             echo "</table>";
