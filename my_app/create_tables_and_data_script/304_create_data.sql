@@ -222,8 +222,8 @@ CREATE TABLE Uses (
     serial_number CHAR(10),
     workerID CHAR(10) NOT NULL,             -- logically should be NOT NULL
     PRIMARY KEY (serial_number),
-    FOREIGN KEY (serial_number) REFERENCES Equipment_Stocks,
-    FOREIGN KEY (workerID) REFERENCES Worker
+    FOREIGN KEY (serial_number) REFERENCES Equipment_Stocks ON DELETE CASCADE,
+    FOREIGN KEY (workerID) REFERENCES Worker ON DELETE CASCADE
 );
 
 INSERT INTO Uses VALUES ('SN4829AD12',	'9587083800');
