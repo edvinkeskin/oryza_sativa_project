@@ -353,6 +353,10 @@
             <p></p>
         </form>
 
+        <hr>
+        <h2>Query Results</h2>
+        <p>The results from running the above queries will be displayed below
+        </p>
     </div>
 
     <?php
