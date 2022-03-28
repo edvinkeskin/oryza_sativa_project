@@ -212,30 +212,24 @@
             <input type="hidden" id="deleteRequest" name="deleteRequest">
             Value: <input type="text" name="deleteValue"> <br><br>
 
-            <input type="submit" value="Insert" name="insertSubmit">
+            <input type="submit" value="Run Query" name="deleteSubmit">
             <p></p>
         </form>
 
         <hr>
 
         <h2>Update</h2>
-        <p>select 
+        <p>Update Computer Serial Code 
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
         </p>
-        <div class="dropdown2">
-            <button>Tables</button>
-            <div class="dropdown2-tables">
-                <button>Peripherals</button>
-                <button>Computer</button>
-            </div>
-        </div>
+        
         <form method="POST" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
+            LM Rank: <input type="text" name="updateLM_rank"> <br><br>
+            New Budget: <input type="text" name="updateNewBudget"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit">
+            <input type="submit" value="Run Query" name="updateSubmit">
             <p></p>
         </form>
 
@@ -314,7 +308,7 @@
             Old Name: <input type="text" name="oldName"> <br><br>
             New Name: <input type="text" name="newName"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit">
+            <input type="submit" value="Run Query" name="aggregationSubmit">
             <p></p>
         </form>
 
@@ -330,7 +324,7 @@
             Old Name: <input type="text" name="oldName"> <br><br>
             New Name: <input type="text" name="newName"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit">
+            <input type="submit" value="Run Query" name="nestedAggregationSubmit">
             <p></p>
         </form>
 
@@ -347,7 +341,7 @@
             Old Name: <input type="text" name="oldName"> <br><br>
             New Name: <input type="text" name="newName"> <br><br>
 
-            <input type="submit" value="Update" name="updateSubmit">
+            <input type="submit" value="Run Query" name="divisionSubmit">
             <p></p>
         </form>
 
@@ -472,21 +466,71 @@
         function handleUpdateRequest() {
             global $db_conn;
 
-            $table = $_POST['table'];
-            $new_name = $_POST['newName'];
+            $LM_rank = $_POST['updateLM_rank'];
+            $new_budget = $_POST['updateNewBudget'];
 
-            // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $table . "'");
+            $result = executePlainSQL("SELECT LM_rank, budget FROM RankBudgetMap");
+            executePlainSQL("UPDATE RankBudgetMap SET budget = '$new_budget' WHERE LM_rank = '$LM_rank'");
+            $result2 = executePlainSQL("SELECT LM_rank, budget FROM RankBudgetMap");
+
+            echo "<br>Updated data from Update Request:<br>";
+
+            echo "<br>Pre-update<br>";
+
+            echo "<table>";
+            echo "<tr><th>LM_Rank</th><th>Budget</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                echo "<tr><td>" . $row["LM_RANK"] . "</td><td>" . $row["BUDGET"] . "</td></tr>";
+            }
+
+            echo "</table>";
+
+            echo "<br>Post-update<br>";
+
+            echo "<table>";
+            echo "<tr><th>LM_Rank</th><th>Budget</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result2, OCI_BOTH)) {
+                echo "<tr><td>" . $row["LM_RANK"] . "</td><td>" . $row["BUDGET"] . "</td></tr>";
+            }
+
+            echo "</table>";
             OCICommit($db_conn);
         }
 
         function handleDeleteRequest() {
             global $db_conn;
 
-            $value = $_GET['deleteValue'];
+            $value = $_POST['deleteValue'];
+            $result = executePlainSQL("SELECT * FROM EquipmentSupplier");
+            executePlainSQL("DELETE FROM EquipmentSupplier WHERE supplier_name = '$value'");
+            $result2 = executePlainSQL("SELECT * FROM EquipmentSupplier");
 
-            echo "<br> creating new table <br>";
-            executePlainSQL("DELETE FROM EquipmentSupplier WHERE supplier_name == ${value}");
+            echo "<br>Deleting data from Deletion Request:<br>";
+
+            echo "<br>Pre-deletion<br>";
+
+            echo "<table>";
+            echo "<tr><th>supplier_name</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                echo "<tr><td>" . $row["SUPPLIER_NAME"] . "</td></tr>";
+            }
+
+            echo "</table>";
+
+            echo "<br>Post-deletion<br>";
+
+            echo "<table>";
+            echo "<tr><th>supplier_name</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result2, OCI_BOTH)) {
+                echo "<tr><td>" . $row["SUPPLIER_NAME"] . "</td></tr>";
+            }
+
+            echo "</table>";
+
             OCICommit($db_conn);
         }
 
@@ -617,7 +661,7 @@
             }
         }
 
-		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit'])) {
             handlePOSTRequest();
         } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit']) || isset($_GET['joinSubmit'])) {
             handleGETRequest();
