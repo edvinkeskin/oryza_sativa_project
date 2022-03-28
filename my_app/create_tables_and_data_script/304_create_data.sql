@@ -81,7 +81,7 @@ CREATE TABLE SuppliedBy (
     supplier_name CHAR(10),
     warehouse_number CHAR(10),
     PRIMARY KEY (supplier_name, warehouse_number),
-    FOREIGN KEY (supplier_name) REFERENCES EquipmentSupplier,
+    FOREIGN KEY (supplier_name) REFERENCES EquipmentSupplier ON DELETE CASCADE,
     FOREIGN KEY (warehouse_number) REFERENCES PhysicalWarehouse
 );
 
@@ -189,7 +189,7 @@ CREATE TABLE Contracts (
     supplier_name CHAR(10),
     LM_ID CHAR(10),
     PRIMARY KEY (supplier_name, LM_ID),
-    FOREIGN KEY (supplier_name) REFERENCES EquipmentSupplier,
+    FOREIGN KEY (supplier_name) REFERENCES EquipmentSupplier ON DELETE CASCADE,
     FOREIGN KEY (LM_ID) REFERENCES LogisticsManager
 );
 
