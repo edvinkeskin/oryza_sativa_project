@@ -300,7 +300,7 @@
 
         <h2>Aggregation</h2>
         <p>Select a warehouse to display the number of items it has in it's aggregated inventory.
-        <p>Some Warehouses: 5839482098, 1295763207, 1274984743, 6479381208, 4632394839
+        <p>Some Warehouses: 5839482098, 1295763207, 4632394839
         </p>
 
         <form method="POST" action="index.php">
@@ -316,7 +316,7 @@
 
         <h2>Nested Aggregation</h2>
         <p>Select a warehouse to display the maximum number of items in that warehouse with the same brand.
-        <p>Some Warehouses: 5839482098, 1295763207, 1274984743, 6479381208, 4632394839
+        <p>Some Warehouses: 5839482098, 1295763207, 4632394839
         </p>
 
         <form method="POST" action="index.php">
