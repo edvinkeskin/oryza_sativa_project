@@ -299,14 +299,14 @@
         <hr>
 
         <h2>Aggregation</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        <p>Select a warehouse to display the number of items it has in it's aggregated inventory.
+        <p>Some Warehouses: 5839482098, 1295763207, 1274984743, 6479381208, 4632394839
         </p>
 
         <form method="POST" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="aggregationRequest" name="aggregationRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
+            Warehouse Number: <input type="text" name="wareHouseNum"> <br><br>
 
             <input type="submit" value="Run Query" name="aggregationSubmit">
             <p></p>
@@ -315,14 +315,14 @@
         <hr>
 
         <h2>Nested Aggregation</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        <p>Select a warehouse to display the maximum number of items in that warehouse with the same brand.
+        <p>Some Warehouses: 5839482098, 1295763207, 1274984743, 6479381208, 4632394839
         </p>
 
         <form method="POST" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
+            Warehouse: <input type="text" name="wareHouseNum"> <br><br>
 
             <input type="submit" value="Run Query" name="nestedAggregationSubmit">
             <p></p>
@@ -443,7 +443,7 @@
 
             // Your username is ora_(CWL_ID) and the password is a(student number). For example,
 			// ora_platypus is the username and a12345678 is the password.
-            $db_conn = OCILogon("ora_hl2001", "a66620923", "dbhost.students.cs.ubc.ca:1522/stu");
+            $db_conn = OCILogon("ora_tzzhzhh", "a69220184", "dbhost.students.cs.ubc.ca:1522/stu");
 
             if ($db_conn) {
                 debugAlertMessage("Database is Connected");
@@ -628,6 +628,52 @@
             echo "</table>";
             OCICommit($db_conn);   
         }
+        
+        function handelAggRequest() {
+            global $db_conn;
+
+            $wareNum = $_POST['wareHouseNum'];
+
+            $result = executePlainSQL(
+                "SELECT COUNT(*) as count
+                FROM Equipment_Stocks, Inventory_HAS
+                WHERE Equipment_Stocks.inventory_number = Inventory_HAS.inventory_number AND Inventory_HAS.warehouse_number = ${wareNum}"
+            );
+            
+            echo "<br>Retrieved data from Aggregation Request:<br>";
+
+            $myCount = OCI_Fetch_Array($result, OCI_BOTH);
+
+            echo "<br> For Warehouse Number: " .$wareNum . " There are in total " . $myCount['COUNT']. " items <br>";
+
+            echo "</table>";
+            OCICommit($db_conn);
+        }
+        
+        function handleNestedAggRequest() {
+            global $db_conn;
+
+            $wareNum = $_POST['wareHouseNum'];
+
+            $result = executePlainSQL(
+                "SELECT MAX(x.occurance) as Max_Occurance
+                FROM (SELECT brand, COUNT(brand) AS occurance 
+                    FROM Inventory_HAS, Equipment_Stocks, ModelNumberBrandMap 
+                    WHERE Inventory_HAS.warehouse_number = ${wareNum}
+                    AND Inventory_HAS.inventory_number = Equipment_Stocks.inventory_number 
+                    AND Equipment_Stocks.model_number = ModelNumberBrandMap.model_number
+                    GROUP BY brand)x"
+            );
+            
+            echo "<br>Retrieved data from Nested Aggregation Request:<br>";
+
+            $myCount = OCI_Fetch_Array($result, OCI_BOTH);
+
+            echo "<br> For Warehouse Number: " .$wareNum . " There are at most " . $myCount['MAX_OCCURANCE']. " items that share the same brand";
+
+            echo "</table>";
+            OCICommit($db_conn);
+        }
 
         // HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
@@ -639,6 +685,10 @@
                     handleUpdateRequest();
                 } else if (array_key_exists('insertQueryRequest', $_POST)) {
                     handleInsertRequest();
+                } else if (array_key_exists('aggregationRequest', $_POST)) {
+                    handelAggRequest();
+                } else if (array_key_exists('nestedAggregationRequest', $_POST)) {
+                    handleNestedAggRequest();
                 }
 
                 disconnectFromDB();
@@ -661,7 +711,7 @@
             }
         }
 
-		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit'])) {
+		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['aggregationSubmit']) || isset($_POST['nestedAggregationSubmit'])) {
             handlePOSTRequest();
         } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit']) || isset($_GET['joinSubmit'])) {
             handleGETRequest();
