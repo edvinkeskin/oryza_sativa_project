@@ -84,20 +84,24 @@
             position: absolute;
         }
 
-        .dropdown-content button {
+        .dropdown-content a {
             color: #1e3821;
             width: 20vw;
+            height: 4vh;
             font-size: 15px;
             background-color: white;
             border: 1px solid #1e3821;
             text-decoration: none;
+            text-align: center;
             display: block;
         }
 
-        .dropdown-content button:hover {
+        .dropdown-content a:hover {
             display: block;
             background-color: #1e3821;
             width: 20vw;
+            height: 4vh;
+            text-align: center;
             color: white
         }
 
@@ -181,20 +185,20 @@
         <div class="dropdown">
             <button>Options</button>
             <div class="dropdown-content">
-                <button>Insert</button>
-                <button>Delete</button>
-                <button>Update</button>
-                <button>Selection</button>
-                <button>Projection</button>
-                <button>Join</button>
-                <button>Aggregation</button>
-                <button>Nested Aggregation</button>
-                <button>Division</button>
+                <a href="#insert">Insert</a>
+                <a href="#delete">Delete</a>
+                <a href="#update">Update</a>
+                <a href="#selection">Selection</a>
+                <a href="#projection">Projection</a>
+                <a href="#join">Join</a>
+                <a href="#aggregation">Aggregation</a>
+                <a href="#nested_aggregation">Nested Aggregation</a>
+                <a href="#division">Division</a>
             </div>
         </div>
 
-        <h2>Insert</h2>
-        <form method="POST" action="index.php">
+        <h2 id="insert">Insert</h2>
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             Number: <input type="text" name="insNo"> <br><br>
@@ -206,8 +210,8 @@
 
         <hr>
 
-        <h2>Delete</h2>
-        <form method="POST" action="index.php">
+        <h2 id="delete">Delete</h2>
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="deleteRequest" name="deleteRequest">
             Value: <input type="text" name="deleteValue"> <br><br>
@@ -218,12 +222,12 @@
 
         <hr>
 
-        <h2>Update</h2>
+        <h2 id="update">Update </h2>
         <p>Update Computer Serial Code 
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
         </p>
         
-        <form method="POST" action="index.php">
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
             LM Rank: <input type="text" name="updateLM_rank"> <br><br>
@@ -239,7 +243,7 @@
 
         <hr>
 
-        <h2>Selection</h2>
+        <h2 id="selection">Selection</h2>
         <p>select LM_rank, budget from BudgetRankMap where budget >= [Value]. Values are case sensitive
         </p>
         <p>value is any real number
@@ -247,7 +251,7 @@
         <p>E.g &emsp; Value: 5000000
         </p>
 
-        <form method="GET" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="selectionRequest" name="selectionRequest">
 
@@ -259,14 +263,14 @@
 
         <hr>
 
-        <h2>Projection</h2>
+        <h2 id="projection">Projection</h2>
         <p>select [Fields] denoting information about Equipment in the database. Values are case sensitive
         </p>
         <p>Fields is a combination of: "serial_number", "model_number", "UPC_code", "inventory_number". Separate by comas
         <p>E.g &emsp; Fields: serial_number, model_number, UPC_code, inventory_number
         </p>
 
-        <form method="GET" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="projectionRequest" name="projectionRequest">
 
@@ -278,7 +282,7 @@
 
         <hr>
 
-        <h2>Join</h2>
+        <h2 id="join">Join</h2>
         <p>Find the Serial Number and Inventory Number of all equipment with brand [Brand]. Values are case sensitive
         </p>
         <p>Brand is any string. Existing brands in database: "HP", "MSI", "LOGITECH", "LENOVO", "DELL", "CORSAIR"
@@ -286,7 +290,7 @@
         <p>E.g &emsp; Brand: DELL
         </p>
 
-        <form method="GET" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="joinRequest" name="joinRequest">
 
@@ -298,12 +302,12 @@
 
         <hr>
 
-        <h2>Aggregation</h2>
+        <h2 id="aggregation">Aggregation</h2>
         <p>Select a warehouse to display the number of items it has in it's aggregated inventory.
         <p>Some Warehouses: 5839482098, 1295763207, 4632394839
         </p>
 
-        <form method="POST" action="index.php">
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="aggregationRequest" name="aggregationRequest">
             Warehouse Number: <input type="text" name="wareHouseNum"> <br><br>
@@ -314,12 +318,12 @@
 
         <hr>
 
-        <h2>Nested Aggregation</h2>
+        <h2 id="nested_aggregation">Nested Aggregation</h2>
         <p>Select a warehouse to display the maximum number of items in that warehouse with the same brand.
         <p>Some Warehouses: 5839482098, 1295763207, 4632394839
         </p>
 
-        <form method="POST" action="index.php">
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
             Warehouse: <input type="text" name="wareHouseNum"> <br><br>
@@ -330,12 +334,12 @@
 
         <hr>
 
-        <h2>Division</h2>
+        <h2 id="division">Division</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
         </p>
         // Find all the suppliers who supply all warehouses
 
-        <form method="GET" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="divisionRequest" name="divisionRequest">
 
