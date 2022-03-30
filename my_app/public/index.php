@@ -185,6 +185,7 @@
         <div class="dropdown">
             <button>Options</button>
             <div class="dropdown-content">
+                <a href="#division">Query Results</a>
                 <a href="#insert">Insert</a>
                 <a href="#delete">Delete</a>
                 <a href="#update">Update</a>
