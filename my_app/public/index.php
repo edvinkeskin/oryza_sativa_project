@@ -212,10 +212,14 @@
         <hr>
 
         <h2 id="delete">Delete</h2>
+        <p>Remove Supplier via supplier_name
+        <p>E.g supplier_name: Mifflin, GoodStuff, Bobs
+        <p>The values are case sensitive and if you enter in the wrong case, the delete statement will not do anything.
+</p>
         <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="deleteRequest" name="deleteRequest">
-            Value: <input type="text" name="deleteValue"> <br><br>
+            Supplier Name: <input type="text" name="deleteValue"> <br><br>
 
             <input type="submit" value="Run Query" name="deleteSubmit">
             <p></p>
@@ -224,9 +228,10 @@
         <hr>
 
         <h2 id="update">Update </h2>
-        <p>Update Computer Serial Code 
+        <p>Update Budget for Logistics Manager
+        <p>E.g LM Rank: L01, L02, L03 Budget: 150000, 20000
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
-        </p>
+</p>
         
         <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
@@ -336,9 +341,8 @@
         <hr>
 
         <h2 id="division">Division</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        <p> Find all suppliers who supply all warehouses
         </p>
-        // Find all the suppliers who supply all warehouses
 
         <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
