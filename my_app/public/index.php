@@ -333,13 +333,11 @@
         <h2>Division</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
         </p>
-        // Find all the students who have passed all the CPSC 401 required courses.
+        // Find all the suppliers who supply all warehouses
 
-        <form method="POST" action="index.php">
+        <form method="GET" action="index.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="divisionRequest" name="divisionRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
 
             <input type="submit" value="Run Query" name="divisionSubmit">
             <p></p>
@@ -628,6 +626,28 @@
             echo "</table>";
             OCICommit($db_conn);   
         }
+
+        function handleDivisionRequest() {
+            global $db_conn;
+            // SHOULD BE EXCEPT INSTEAD OF INTERSECT BUT GIVES SYNTAX ERROR
+            $result = executePlainSQL(
+                "SELECT *
+                FROM EquipmentSupplier
+                WHERE NOT EXISTS (
+                (SELECT warehouse_number FROM PhysicalWarehouse) INTERSECT
+                (SELECT warehouse_number FROM SuppliedBy WHERE EquipmentSupplier.supplier_name = SuppliedBy.supplier_name))"
+            );
+            echo "<br>Retrieved data from Division Request:<br>";
+            echo "<table>";
+            echo "<tr><th>supplier_name</th><th>email</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                echo "<tr><td>" . $row["SUPPLIER_NAME"] . "</td></tr>";
+            }
+
+            echo "</table>";
+            OCICommit($db_conn);
+        }
         
         function handelAggRequest() {
             global $db_conn;
@@ -705,6 +725,8 @@
                     handleProjectionRequest();
                 } else if (array_key_exists('joinRequest', $_GET)) {
                     handleJoinRequest();
+                } else if (array_key_exists('divisionRequest', $_GET)) {
+                    handleDivisionRequest();
                 }
 
                 disconnectFromDB();
@@ -713,7 +735,7 @@
 
 		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['aggregationSubmit']) || isset($_POST['nestedAggregationSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit']) || isset($_GET['joinSubmit'])) {
+        } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit']) || isset($_GET['joinSubmit']) || isset($_GET['divisionSubmit'])) {
             handleGETRequest();
         }
 		?>
