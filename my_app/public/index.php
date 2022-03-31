@@ -450,7 +450,7 @@
 
             // Your username is ora_(CWL_ID) and the password is a(student number). For example,
 			// ora_platypus is the username and a12345678 is the password.
-            $db_conn = OCILogon("ora_tzzhzhh", "a69220184", "dbhost.students.cs.ubc.ca:1522/stu");
+            $db_conn = OCILogon("ora_ekeskin", "a20870838", "dbhost.students.cs.ubc.ca:1522/stu");
 
             if ($db_conn) {
                 debugAlertMessage("Database is Connected");
@@ -638,20 +638,21 @@
 
         function handleDivisionRequest() {
             global $db_conn;
-            // SHOULD BE EXCEPT INSTEAD OF INTERSECT BUT GIVES SYNTAX ERROR
+
             $result = executePlainSQL(
                 "SELECT *
                 FROM EquipmentSupplier
                 WHERE NOT EXISTS (
-                (SELECT warehouse_number FROM PhysicalWarehouse) INTERSECT
+                (SELECT warehouse_number FROM PhysicalWarehouse) MINUS
                 (SELECT warehouse_number FROM SuppliedBy WHERE EquipmentSupplier.supplier_name = SuppliedBy.supplier_name))"
             );
             echo "<br>Retrieved data from Division Request:<br>";
+
             echo "<table>";
-            echo "<tr><th>supplier_name</th><th>email</th></tr>";
+            echo "<tr><th>supplier name</th><th>email</th></tr>";
 
             while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-                echo "<tr><td>" . $row["SUPPLIER_NAME"] . "</td></tr>";
+                echo "<tr>><td>" . $row["SUPPLIER_NAME"] . "</td><td>" . $row["WAREHOUSE_NUMBER"] . "</td></tr>";
             }
 
             echo "</table>";

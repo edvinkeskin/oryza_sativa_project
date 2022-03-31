@@ -85,15 +85,15 @@ CREATE TABLE SuppliedBy (
     FOREIGN KEY (warehouse_number) REFERENCES PhysicalWarehouse
 );
 
-INSERT INTO SuppliedBy VALUES('GoodStuff',    '1295763207');
-INSERT INTO SuppliedBy VALUES('Canucks',    '5839482098');
-INSERT INTO SuppliedBy VALUES('Bobs',        '1295763207');
-INSERT INTO SuppliedBy VALUES('White Box',    '4632394839');
-INSERT INTO SuppliedBy VALUES('Mifflin',    '5839482098');
-INSERT INTO SuppliedBy VALUES('Mifflin',    '1295763207');
-INSERT INTO SuppliedBy VALUES('Mifflin',    '1274984743');
-INSERT INTO SuppliedBy VALUES('Mifflin',    '6479381208');
-INSERT INTO SuppliedBy VALUES('Mifflin',    '4632394839');
+INSERT INTO SuppliedBy VALUES('GoodStuff',	'1295763207');
+INSERT INTO SuppliedBy VALUES('Canucks',	'5839482098');
+INSERT INTO SuppliedBy VALUES('Bobs',	    '1295763207');
+INSERT INTO SuppliedBy VALUES('White Box',	'4632394839');
+INSERT INTO SuppliedBy VALUES('Mifflin',	'5839482098');
+INSERT INTO SuppliedBy VALUES('Mifflin',	'1295763207');
+INSERT INTO SuppliedBy VALUES('Mifflin',	'1274984743');
+INSERT INTO SuppliedBy VALUES('Mifflin',	'6479381208');
+INSERT INTO SuppliedBy VALUES('Mifflin',	'4632394839');
 
 
 --------------------------------------- Inventory Has
