@@ -652,7 +652,7 @@
             echo "<tr><th>supplier name</th><th>email</th></tr>";
 
             while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-                echo "<tr>><td>" . $row["SUPPLIER_NAME"] . "</td><td>" . $row["WAREHOUSE_NUMBER"] . "</td></tr>";
+                echo "<tr>><td>" . $row["SUPPLIER_NAME"] . "</td><td>" . $row["EMAIL"] . "</td></tr>";
             }
 
             echo "</table>";
