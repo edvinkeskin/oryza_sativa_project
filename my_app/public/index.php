@@ -199,11 +199,15 @@
         </div>
 
         <h2 id="insert">Insert</h2>
+        <p>Add a new equipment to a warehouse by specifying an Inventory Number, Serial Number, model number and UPC and the brand
         <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            Number: <input type="text" name="insNo"> <br><br>
-            Name: <input type="text" name="insName"> <br><br>
+            Inventory Number: <input type="text" name="iNum"> <br><br>
+            Serial Number: <input type="text" name="sNum"> <br><br>
+            Model Number: <input type="text" name="mNum"> <br><br>
+            UPC Code: <input type="text" name="upc"> <br><br>
+            Brand: <input type="text" name="brand"> <br><br>
 
             <input type="submit" value="Insert" name="insertSubmit">
             <p></p>
@@ -544,17 +548,20 @@
         function handleInsertRequest() {
             global $db_conn;
 
+            $iNum = $_POST["iNum"];
+            $sNum = $_POST["sNum"];
+            $mNum = $_POST["mNum"];
+            $upc = $_POST["upc"];
+            $brand = $_POST["brand"];
+
             //Getting the values from user and insert data into the table
-            $tuple = array (
-                ":bind1" => $_POST['insNo'],
-                ":bind2" => $_POST['insName']
-            );
+            executePlainSQL("INSERT INTO Equipment_Stocks (serial_number, model_number, UPC_code, inventory_number)
+                             VALUES('${sNum}', '${mNum}', '${upc}', '${iNum}')");
 
-            $alltuples = array (
-                $tuple
-            );
+            executePlainSQL("INSERT INTO ModelNumberBrandMap (model_number, brand)
+                             VALUES('${mNum}', '${brand}')");
 
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
+            echo "<br> Added " . $sNum . " into Inventory " . $iNum . " and updated the brand map if appropriate";
             OCICommit($db_conn);
         }
 
