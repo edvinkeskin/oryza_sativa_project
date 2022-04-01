@@ -1,3 +1,4 @@
+<!--Based off of https://www.students.cs.ubc.ca/~cs-304/resources/php-oracle-resources/oracle-test.txt-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -407,53 +408,6 @@
 			return $statement;
 		}
 
-        function executeBoundSQL($cmdstr, $list) {
-            /* Sometimes the same statement will be executed several times with different values for the variables involved in the query.
-		In this case you don't need to create the statement several times. Bound variables cause a statement to only be
-		parsed once and you can reuse the statement. This is also very useful in protecting against SQL injection.
-		See the sample code below for how this function is used */
-
-			global $db_conn, $success;
-			$statement = OCIParse($db_conn, $cmdstr);
-
-            if (!$statement) {
-                echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
-                $e = OCI_Error($db_conn);
-                echo htmlentities($e['message']);
-                $success = False;
-            }
-
-            foreach ($list as $tuple) {
-                foreach ($tuple as $bind => $val) {
-                    //echo $val;
-                    //echo "<br>".$bind."<br>";
-                    OCIBindByName($statement, $bind, $val);
-                    unset ($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
-				}
-
-                $r = OCIExecute($statement, OCI_DEFAULT);
-                if (!$r) {
-                    echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
-                    $e = OCI_Error($statement); // For OCIExecute errors, pass the statementhandle
-                    echo htmlentities($e['message']);
-                    echo "<br>";
-                    $success = False;
-                }
-            }
-        }
-
-        function printResult($result) { //prints results from a select statement
-            echo "<br>Retrieved data from table demoTable:<br>";
-            echo "<table>";
-            echo "<tr><th>ID</th><th>Name</th></tr>";
-
-            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-                echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-            }
-
-            echo "</table>";
-        }
-
         function connectToDB() {
             global $db_conn;
 
@@ -580,16 +534,6 @@
             OCICommit($db_conn);
         }
 
-        function handleCountRequest() {
-            global $db_conn;
-
-            $result = executePlainSQL("SELECT Count(*) FROM demoTable");
-
-            if (($row = oci_fetch_row($result)) != false) {
-                echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
-            }
-        }
-
         function handleSelectionRequest() {
             global $db_conn;
 
@@ -636,8 +580,6 @@
 
             $fields = $_GET['joinFields'];
             $brand = $_GET['joinBrand'];
-
-            // $result = executePlainSQL("SELECT ${fields} FROM ${table}");
 
             $result = executePlainSQL(
                 "SELECT serial_number, inventory_number
