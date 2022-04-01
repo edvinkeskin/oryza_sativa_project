@@ -200,6 +200,9 @@
 
         <h2 id="insert">Insert</h2>
         <p>Add a new equipment to a warehouse by specifying an Inventory Number, Serial Number, model number and UPC and the brand
+        <p>The equipment type also needs to be specified to being either a computer(0) or a peripheral(1) and an equipment type which specifies the specialisation.
+        <p> Example: For an HP Mouse into Inventory 7954999012
+        <p> 7954999012, SLW1828AB4, HP010K13, 3958739509, HP, 1, MOUSE
         <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
@@ -208,6 +211,8 @@
             Model Number: <input type="text" name="mNum"> <br><br>
             UPC Code: <input type="text" name="upc"> <br><br>
             Brand: <input type="text" name="brand"> <br><br>
+            Computer(0) or Peripheral(1): <input type="text" name="subtype"> <br><br>
+            Equipment Type: <input type="text" name="eType"> <br><br>
 
             <input type="submit" value="Insert" name="insertSubmit">
             <p></p>
@@ -454,7 +459,7 @@
 
             // Your username is ora_(CWL_ID) and the password is a(student number). For example,
 			// ora_platypus is the username and a12345678 is the password.
-            $db_conn = OCILogon("ora_ekeskin", "a20870838", "dbhost.students.cs.ubc.ca:1522/stu");
+            $db_conn = OCILogon("ora_tzzhzhh", "a69220184", "dbhost.students.cs.ubc.ca:1522/stu");
 
             if ($db_conn) {
                 debugAlertMessage("Database is Connected");
@@ -553,6 +558,8 @@
             $mNum = $_POST["mNum"];
             $upc = $_POST["upc"];
             $brand = $_POST["brand"];
+            $subType = $_POST["subtype"];
+            $eType = $_POST["eType"];
 
             //Getting the values from user and insert data into the table
             executePlainSQL("INSERT INTO Equipment_Stocks (serial_number, model_number, UPC_code, inventory_number)
@@ -560,6 +567,14 @@
 
             executePlainSQL("INSERT INTO ModelNumberBrandMap (model_number, brand)
                              VALUES('${mNum}', '${brand}')");
+            
+            if ($eType === '0') {
+                executePlainSQL("INSERT INTO Computer (serial_number, equipment_type)
+                             VALUES('${sNum}', '${eType}')");
+            } else {
+                executePlainSQL("INSERT INTO Peripherals (serial_number, equipment_type)
+                             VALUES('${sNum}', '${eType}')");
+            }
 
             echo "<br> Added " . $sNum . " into Inventory " . $iNum . " and updated the brand map if appropriate";
             OCICommit($db_conn);
