@@ -84,20 +84,24 @@
             position: absolute;
         }
 
-        .dropdown-content button {
+        .dropdown-content a {
             color: #1e3821;
             width: 20vw;
+            height: 4vh;
             font-size: 15px;
             background-color: white;
             border: 1px solid #1e3821;
             text-decoration: none;
+            text-align: center;
             display: block;
         }
 
-        .dropdown-content button:hover {
+        .dropdown-content a:hover {
             display: block;
             background-color: #1e3821;
             width: 20vw;
+            height: 4vh;
+            text-align: center;
             color: white
         }
 
@@ -181,24 +185,29 @@
         <div class="dropdown">
             <button>Options</button>
             <div class="dropdown-content">
-                <button>Insert</button>
-                <button>Delete</button>
-                <button>Update</button>
-                <button>Selection</button>
-                <button>Projection</button>
-                <button>Join</button>
-                <button>Aggregation</button>
-                <button>Nested Aggregation</button>
-                <button>Division</button>
+                <a href="#division">Query Results</a>
+                <a href="#insert">Insert</a>
+                <a href="#delete">Delete</a>
+                <a href="#update">Update</a>
+                <a href="#selection">Selection</a>
+                <a href="#projection">Projection</a>
+                <a href="#join">Join</a>
+                <a href="#aggregation">Aggregation</a>
+                <a href="#nested_aggregation">Nested Aggregation</a>
+                <a href="#division">Division</a>
             </div>
         </div>
 
-        <h2>Insert</h2>
-        <form method="POST" action="index.php">
+        <h2 id="insert">Insert</h2>
+        <p>Add a new equipment to a warehouse by specifying an Inventory Number, Serial Number, model number and UPC and the brand
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            Number: <input type="text" name="insNo"> <br><br>
-            Name: <input type="text" name="insName"> <br><br>
+            Inventory Number: <input type="text" name="iNum"> <br><br>
+            Serial Number: <input type="text" name="sNum"> <br><br>
+            Model Number: <input type="text" name="mNum"> <br><br>
+            UPC Code: <input type="text" name="upc"> <br><br>
+            Brand: <input type="text" name="brand"> <br><br>
 
             <input type="submit" value="Insert" name="insertSubmit">
             <p></p>
@@ -206,11 +215,15 @@
 
         <hr>
 
-        <h2>Delete</h2>
-        <form method="POST" action="index.php">
+        <h2 id="delete">Delete</h2>
+        <p>Remove Supplier via supplier_name
+        <p>E.g supplier_name: Mifflin, GoodStuff, Bobs
+        <p>The values are case sensitive and if you enter in the wrong case, the delete statement will not do anything.
+</p>
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="deleteRequest" name="deleteRequest">
-            Value: <input type="text" name="deleteValue"> <br><br>
+            Supplier Name: <input type="text" name="deleteValue"> <br><br>
 
             <input type="submit" value="Run Query" name="deleteSubmit">
             <p></p>
@@ -218,12 +231,13 @@
 
         <hr>
 
-        <h2>Update</h2>
-        <p>Update Computer Serial Code 
+        <h2 id="update">Update </h2>
+        <p>Update Budget for Logistics Manager
+        <p>E.g LM Rank: L01, L02, L03 Budget: 150000, 20000
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
-        </p>
+</p>
         
-        <form method="POST" action="index.php">
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
             LM Rank: <input type="text" name="updateLM_rank"> <br><br>
@@ -239,7 +253,7 @@
 
         <hr>
 
-        <h2>Selection</h2>
+        <h2 id="selection">Selection</h2>
         <p>select LM_rank, budget from BudgetRankMap where budget >= [Value]. Values are case sensitive
         </p>
         <p>value is any real number
@@ -247,7 +261,7 @@
         <p>E.g &emsp; Value: 5000000
         </p>
 
-        <form method="GET" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="selectionRequest" name="selectionRequest">
 
@@ -259,14 +273,14 @@
 
         <hr>
 
-        <h2>Projection</h2>
+        <h2 id="projection">Projection</h2>
         <p>select [Fields] denoting information about Equipment in the database. Values are case sensitive
         </p>
         <p>Fields is a combination of: "serial_number", "model_number", "UPC_code", "inventory_number". Separate by comas
         <p>E.g &emsp; Fields: serial_number, model_number, UPC_code, inventory_number
         </p>
 
-        <form method="GET" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="projectionRequest" name="projectionRequest">
 
@@ -278,7 +292,7 @@
 
         <hr>
 
-        <h2>Join</h2>
+        <h2 id="join">Join</h2>
         <p>Find the Serial Number and Inventory Number of all equipment with brand [Brand]. Values are case sensitive
         </p>
         <p>Brand is any string. Existing brands in database: "HP", "MSI", "LOGITECH", "LENOVO", "DELL", "CORSAIR"
@@ -286,7 +300,7 @@
         <p>E.g &emsp; Brand: DELL
         </p>
 
-        <form method="GET" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="joinRequest" name="joinRequest">
 
@@ -298,12 +312,12 @@
 
         <hr>
 
-        <h2>Aggregation</h2>
+        <h2 id="aggregation">Aggregation</h2>
         <p>Select a warehouse to display the number of items it has in it's aggregated inventory.
-        <p>Some Warehouses: 5839482098, 1295763207, 1274984743, 6479381208, 4632394839
+        <p>Some Warehouses: 5839482098, 1295763207, 4632394839
         </p>
 
-        <form method="POST" action="index.php">
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="aggregationRequest" name="aggregationRequest">
             Warehouse Number: <input type="text" name="wareHouseNum"> <br><br>
@@ -314,12 +328,12 @@
 
         <hr>
 
-        <h2>Nested Aggregation</h2>
+        <h2 id="nested_aggregation">Nested Aggregation</h2>
         <p>Select a warehouse to display the maximum number of items in that warehouse with the same brand.
-        <p>Some Warehouses: 5839482098, 1295763207, 1274984743, 6479381208, 4632394839
+        <p>Some Warehouses: 5839482098, 1295763207, 4632394839
         </p>
 
-        <form method="POST" action="index.php">
+        <form method="POST" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
             Warehouse: <input type="text" name="wareHouseNum"> <br><br>
@@ -330,16 +344,13 @@
 
         <hr>
 
-        <h2>Division</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.
+        <h2 id="division">Division</h2>
+        <p> Find all suppliers who supply all warehouses
         </p>
-        // Find all the students who have passed all the CPSC 401 required courses.
 
-        <form method="POST" action="index.php">
+        <form method="GET" action="index.php" >
             <!--refresh page when submitted-->
             <input type="hidden" id="divisionRequest" name="divisionRequest">
-            Old Name: <input type="text" name="oldName"> <br><br>
-            New Name: <input type="text" name="newName"> <br><br>
 
             <input type="submit" value="Run Query" name="divisionSubmit">
             <p></p>
@@ -537,17 +548,20 @@
         function handleInsertRequest() {
             global $db_conn;
 
+            $iNum = $_POST["iNum"];
+            $sNum = $_POST["sNum"];
+            $mNum = $_POST["mNum"];
+            $upc = $_POST["upc"];
+            $brand = $_POST["brand"];
+
             //Getting the values from user and insert data into the table
-            $tuple = array (
-                ":bind1" => $_POST['insNo'],
-                ":bind2" => $_POST['insName']
-            );
+            executePlainSQL("INSERT INTO Equipment_Stocks (serial_number, model_number, UPC_code, inventory_number)
+                             VALUES('${sNum}', '${mNum}', '${upc}', '${iNum}')");
 
-            $alltuples = array (
-                $tuple
-            );
+            executePlainSQL("INSERT INTO ModelNumberBrandMap (model_number, brand)
+                             VALUES('${mNum}', '${brand}')");
 
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
+            echo "<br> Added " . $sNum . " into Inventory " . $iNum . " and updated the brand map if appropriate";
             OCICommit($db_conn);
         }
 
@@ -628,6 +642,29 @@
             echo "</table>";
             OCICommit($db_conn);   
         }
+
+        function handleDivisionRequest() {
+            global $db_conn;
+
+            $result = executePlainSQL(
+                "SELECT *
+                FROM EquipmentSupplier
+                WHERE NOT EXISTS (
+                (SELECT warehouse_number FROM PhysicalWarehouse) MINUS
+                (SELECT warehouse_number FROM SuppliedBy WHERE EquipmentSupplier.supplier_name = SuppliedBy.supplier_name))"
+            );
+            echo "<br>Retrieved data from Division Request:<br>";
+
+            echo "<table>";
+            echo "<tr><th>supplier name</th><th>email</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                echo "<tr>><td>" . $row["SUPPLIER_NAME"] . "</td><td>" . $row["EMAIL"] . "</td></tr>";
+            }
+
+            echo "</table>";
+            OCICommit($db_conn);
+        }
         
         function handelAggRequest() {
             global $db_conn;
@@ -705,6 +742,8 @@
                     handleProjectionRequest();
                 } else if (array_key_exists('joinRequest', $_GET)) {
                     handleJoinRequest();
+                } else if (array_key_exists('divisionRequest', $_GET)) {
+                    handleDivisionRequest();
                 }
 
                 disconnectFromDB();
@@ -713,7 +752,7 @@
 
 		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['aggregationSubmit']) || isset($_POST['nestedAggregationSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit']) || isset($_GET['joinSubmit'])) {
+        } else if (isset($_GET['selectionSubmit']) || isset($_GET['projectionSubmit']) || isset($_GET['joinSubmit']) || isset($_GET['divisionSubmit'])) {
             handleGETRequest();
         }
 		?>
